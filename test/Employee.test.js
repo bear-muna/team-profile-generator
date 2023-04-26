@@ -1,10 +1,13 @@
+// Importing employee class for unit testing
 const Employee = require("../lib/Employee");
 
+// Test to see if class can instantiate
 test("Can instantiate Employee instance", () => {
   const e = new Employee();
   expect(typeof(e)).toBe("object");
 });
 
+// Tests to see if objects have constructor values
 test("Can set name via constructor arguments", () => {
   const name = "Alice";
   const e = new Employee(name);
@@ -23,6 +26,7 @@ test("Can set email via constructor argument", () => {
   expect(e.email).toBe(testValue);
 });
 
+// Tests to see if object methods can return appropriate values
 test("Can get name via getName()", () => {
   const testValue = "Alice";
   const e = new Employee(testValue);

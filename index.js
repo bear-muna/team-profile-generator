@@ -1,15 +1,18 @@
+// importing packages and other classes 
 const inquirer = require('inquirer');
 const fs = require('fs');
-const Employee = require('./lib/Employee');
 const Engineer = require('./lib/Engineer');
 const Intern = require('./lib/Intern');
 const Manager = require('./lib/Manager');
 const generate = require('./util/generateHtml');
 
+// Team array for fs function
 const team = [];
 
+// Function to take in user input of team
 const teamApp = async () => {
     try {
+        // Prompt method
         const data = await inquirer
             .prompt([
                 {
@@ -19,8 +22,11 @@ const teamApp = async () => {
                     name: 'intro',
                 },
             ]);
+        // Switch case that takes in previous prompt's answer
         switch (data.intro) {
             case 'Create Your Team':
+                
+                // Prompt method for manager
                 const managerData = await inquirer 
                     .prompt([
                         {
@@ -50,6 +56,8 @@ const teamApp = async () => {
                             name: 'memberAdd'
                         },
                     ]);
+                
+                // Adding object into team array    
                 team.push(new Manager(managerData.managerName, managerData.managerID, managerData.managerEmail, managerData.managerOfficeNumber));    
                 memberApp(managerData.memberAdd);
                 break;
@@ -57,15 +65,20 @@ const teamApp = async () => {
             case 'Quit':
                 break;
         }
+    // Catching error 
     } catch (err) {
         console.log(err);
     }
 }
 
+// Function to create members
 const memberApp = async (choice) => {
     try {
+        // Switch case for answer from previous prompt
         switch (choice) {
             case 'Engineer':
+                
+                // Engineer prompt
                 const engineerData = await inquirer
                     .prompt([
                         {
@@ -95,11 +108,13 @@ const memberApp = async (choice) => {
                             name: 'memberAdd',
                         },
                     ]);
+                // Adding engineer object to team array
                 team.push(new Engineer(engineerData.engineerName, engineerData.engineerID, engineerData.engineerEmail, engineerData.engineerGithub));
                 memberApp(engineerData.memberAdd);
                 break;
 
             case 'Intern':
+                // Intern prompt
                 const internData = await inquirer
                     .prompt([
                         {
@@ -129,15 +144,18 @@ const memberApp = async (choice) => {
                             name: 'memberAdd',
                         }
                     ]);
+                // Adding intern object into team array
                 team.push(new Intern(internData.internName, internData.internID, internData.internEmail, internData.internSchool));
                 memberApp(internData.memberAdd);
                 break;
     
             case 'Quit':
+                // Creates HTML file
                 fs.writeFile('./dist/index.html', generate(team), err => 
                     err ? console.log(err) : console.log("Success"));
                 break;          
         }
+    // Catches error
     } catch (err) {
         console.log(err);
     }
